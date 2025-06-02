@@ -161,6 +161,21 @@ impl MemoryStore {
         Ok(result)
     }
 
+    /// Finds relevant memories for multiple query vectors in a single call.
+    ///
+    /// This is a convenience wrapper that iterates over each query vector and
+    /// returns a vector of results per query.
+    pub fn find_relevant_batch(
+        &mut self,
+        query_vectors: &[Vec<f32>],
+        limit: usize,
+    ) -> Result<Vec<Vec<(f32, Memory)>>> {
+        query_vectors
+            .iter()
+            .map(|q| self.find_relevant(q, limit))
+            .collect()
+    }
+
     /// Performs maintenance operations like pruning old memories.
     ///
     /// Returns the number of memories that were pruned.

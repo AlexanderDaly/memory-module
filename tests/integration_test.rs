@@ -94,6 +94,29 @@ fn test_retention_calculation() {
     assert!(emotional_retention > retention);
 }
 
+#[test]
+fn test_find_relevant_batch() {
+    let profile = AgentProfile::default();
+    let state = AgentState {
+        current_age: 25.0,
+        sleep_debt: 0.0,
+        cortisol_level: 0.0,
+        fatigue: 0.0,
+        training_factor: 0.0,
+    };
+
+    let mut store = MemoryStore::new(profile, state);
+    store.add_memory(Memory::new(vec![0.1, 0.2, 0.3], 0.0, 25.0, 1.0));
+    store.add_memory(Memory::new(vec![0.2, 0.3, 0.4], 0.0, 25.0, 1.0));
+
+    let queries = vec![vec![0.1, 0.2, 0.3], vec![0.2, 0.3, 0.4]];
+    let results = store.find_relevant_batch(&queries, 1).unwrap();
+
+    assert_eq!(results.len(), 2);
+    assert_eq!(results[0].len(), 1);
+    assert_eq!(results[1].len(), 1);
+}
+
 #[cfg(feature = "concurrent")]
 #[test]
 fn test_concurrent_store_basic() {
