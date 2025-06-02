@@ -90,6 +90,18 @@ impl ShardedMemoryStore {
         Ok(result)
     }
 
+    /// Finds relevant memories for multiple query vectors across all shards.
+    pub fn find_relevant_batch(
+        &self,
+        query_vectors: &[Vec<f32>],
+        limit: usize,
+    ) -> Result<Vec<Vec<(f32, Memory)>>> {
+        query_vectors
+            .iter()
+            .map(|q| self.find_relevant(q, limit))
+            .collect()
+    }
+
     /// Performs maintenance operations like pruning old memories on all shards.
     pub fn maintain(&self, retention_threshold: f32) -> usize {
         assert!((0.0..=1.0).contains(&retention_threshold));
