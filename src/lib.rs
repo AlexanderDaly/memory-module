@@ -1,0 +1,99 @@
+//! A biologically inspired memory module for AI agents.
+//! 
+//! This crate provides a flexible framework for modeling memory formation, retention, and retrieval
+//! based on cognitive science principles. It's designed to be integrated into AI systems that
+//! require realistic memory behavior, such as NPCs in games or virtual assistants.
+//!
+//! # Features
+//! - Biologically plausible memory formation and decay
+//! - Emotional modulation of memory strength
+//! - Interference-based forgetting
+//! - Capacity-limited memory storage
+//! - Configurable agent profiles for different memory behaviors
+//!
+//! # Example
+//! ```no_run
+//! use memory_module::{
+//!     AgentProfile, AgentState, Memory, MemoryStore,
+//!     chrono::Utc,
+//! };
+//!
+//! // Create an agent profile with default parameters
+//! let profile = AgentProfile::default();
+//! 
+//! // Create an initial agent state
+//! let state = AgentState {
+//!     current_age: 30.0,
+//!     sleep_debt: 0.2,
+//!     cortisol_level: 0.1,
+//!     fatigue: 0.3,
+//!     training_factor: 0.4,
+//! };
+//!
+//! // Create a new memory store
+//! let mut store = MemoryStore::new(profile, state);
+//!
+//! // Create a new memory
+//! let memory = Memory::new(
+//!     vec![0.1, 0.2, 0.3], // Semantic vector
+//!     0.5,                // Emotion (-1.0 to 1.0)
+//!     25.0,               // Age at formation
+//!     1.0,                // Capacity weight
+//! );
+//!
+//! // Add the memory to the store
+//! let memory_id = store.add_memory(memory);
+//!
+//! // Later, retrieve relevant memories
+//! let query = vec![0.15, 0.25, 0.35];
+//! ```
+
+#![warn(missing_docs)]
+#![warn(rustdoc::missing_crate_level_docs)]
+#![doc(html_root_url = "https://docs.rs/memory-module/0.1.0")]
+#![doc(html_logo_url = "https://example.com/logo.png")]
+#![doc(html_favicon_url = "https://example.com/favicon.ico")]
+
+pub mod error;
+pub mod model;
+pub mod store;
+
+// Re-exports
+pub use chrono;
+pub use model::{AgentProfile, AgentState, Memory};
+pub use store::MemoryStore;
+pub use uuid;
+
+/// Prelude for convenient importing
+///
+/// This module provides a prelude that can be imported to bring commonly used types
+/// and traits into scope with a single `use` statement.
+///
+/// # Example
+/// ```
+/// use memory_module::prelude::*;
+/// ```
+pub mod prelude {
+    pub use crate::{
+        error::{MemoryError, Result},
+        model::{AgentProfile, AgentState, Memory},
+        store::MemoryStore,
+    };
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use approx::assert_relative_eq;
+
+    #[test]
+    fn test_prelude_reexports() {
+        // Verify that all expected items are re-exported
+        let _: MemoryError = MemoryError::NotFound("test".to_string());
+        let _: Result<()> = Ok(());
+        let _ = AgentProfile::default();
+        let _ = AgentState::default();
+        let _ = Memory::new(vec![], 0.0, 0.0, 0.0);
+        let _ = MemoryStore::default();
+    }
+}

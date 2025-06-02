@@ -1,0 +1,32 @@
+[package]
+name = "memory-module"
+version = "0.1.0"
+edition = "2021"
+description = "A biologically inspired memory module for AI agents"
+authors = ["Your Name"]
+license = "MIT"
+
+[features]
+default = ["serde"]
+serde = ["dep:serde", "dep:serde_json"]
+
+[dependencies]
+# Core dependencies
+chrono = { version = "0.4.34", features = ["serde"] }
+uuid = { version = "1.6.1", features = ["v4", "serde"] }
+serde = { version = "1.0.196", features = ["derive"], optional = true }
+serde_json = { version = "1.0.113", optional = true }
+thiserror = "1.0.50"
+log = "0.4.20"
+
+# Math and vector operations
+rand = "0.8.5"
+ordered-float = "3.9.1"
+
+# For vector similarity search (optional)
+faiss = { version = "0.12.1", optional = true }
+
+[dev-dependencies]
+rstest = "0.18.2"
+approx = "0.5.1"
+env_logger = "0.11.3"
