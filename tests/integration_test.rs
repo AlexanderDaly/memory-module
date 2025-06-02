@@ -93,3 +93,23 @@ fn test_retention_calculation() {
     let emotional_retention = emotional_memory.calculate_retention(now, &agent_state, &agent_profile);
     assert!(emotional_retention > retention);
 }
+
+#[cfg(feature = "concurrent")]
+#[test]
+fn test_concurrent_store_basic() {
+    let profile = AgentProfile::default();
+    let state = AgentState {
+        current_age: 25.0,
+        sleep_debt: 0.0,
+        cortisol_level: 0.0,
+        fatigue: 0.0,
+        training_factor: 0.0,
+    };
+
+    let store = ConcurrentMemoryStore::new(profile, state);
+    let memory = Memory::new(vec![0.0, 1.0], 0.0, 25.0, 1.0);
+    let id = memory.id;
+    store.add_memory(memory);
+    let retrieved = store.get_memory(&id).expect("memory missing");
+    assert_eq!(retrieved.id, id);
+}
