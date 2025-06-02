@@ -41,3 +41,6 @@ retention falls below a configurable threshold.
 The `AgentProfile` and `AgentState` influence the retention calculations during
 both querying and maintenance, allowing the store to simulate realistic memory
 behaviour.
+
+## Decision Log
+- _2024-05-13_: Chose simple HashMap-based store for initial implementation to optimize for clarity over performance.
