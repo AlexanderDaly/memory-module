@@ -1,3 +1,8 @@
+//! Memory storage and retrieval utilities.
+//!
+//! This module defines [`MemoryStore`], an in-memory store that provides basic
+//! operations for inserting, querying, and maintaining [`Memory`] items.
+
 use crate::error::{MemoryError, Result};
 use crate::model::{AgentProfile, AgentState, Memory};
 use chrono::Utc;
@@ -12,7 +17,24 @@ pub struct MemoryStore {
 }
 
 impl MemoryStore {
-    /// Creates a new MemoryStore with the given agent profile and state
+    /// Creates a new [`MemoryStore`] with the given [`AgentProfile`] and [`AgentState`].
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use memory_module::prelude::*;
+    ///
+    /// let profile = AgentProfile::default();
+    /// let state = AgentState {
+    ///     current_age: 30.0,
+    ///     sleep_debt: 0.0,
+    ///     cortisol_level: 0.0,
+    ///     fatigue: 0.0,
+    ///     training_factor: 0.0,
+    /// };
+    /// let store = MemoryStore::new(profile, state);
+    /// assert_eq!(store.agent_profile().k, 0.5);
+    /// ```
     pub fn new(agent_profile: AgentProfile, agent_state: AgentState) -> Self {
         Self {
             memories: HashMap::new(),
@@ -38,7 +60,11 @@ impl MemoryStore {
         self.memories.get_mut(id)
     }
 
-    /// Removes a memory by ID
+    /// Removes a memory by ID.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`MemoryError::NotFound`] if the requested memory does not exist.
     pub fn remove_memory(&mut self, id: &Uuid) -> Result<()> {
         self.memories
             .remove(id)
@@ -46,7 +72,15 @@ impl MemoryStore {
             .ok_or_else(|| MemoryError::not_found(id))
     }
 
-    /// Finds memories matching a query vector, ordered by relevance
+    /// Finds memories matching a query vector, ordered by relevance.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`MemoryError::NotFound`] if no memories exist in the store.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided `limit` is `0`.
     pub fn find_relevant(
         &mut self,
         query_vector: &[f32],
@@ -89,9 +123,18 @@ impl MemoryStore {
         Ok(result)
     }
 
-    /// Performs maintenance operations like pruning old memories
-    /// Returns the number of memories that were pruned
+    /// Performs maintenance operations like pruning old memories.
+    ///
+    /// Returns the number of memories that were pruned.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `retention_threshold` is not within `0.0..=1.0`.
     pub fn maintain(&mut self, retention_threshold: f32) -> usize {
+        assert!(
+            (0.0..=1.0).contains(&retention_threshold),
+            "retention_threshold must be between 0.0 and 1.0"
+        );
         let now = Utc::now();
         let before = self.memories.len();
         
@@ -119,7 +162,9 @@ impl MemoryStore {
     }
 }
 
-/// Calculates cosine similarity between two vectors
+/// Calculates cosine similarity between two vectors.
+///
+/// Returns `0.0` if the vectors are empty or their lengths differ.
 fn cosine_similarity(a: &[f32], b: &[f32]) -> f32 {
     if a.is_empty() || b.is_empty() || a.len() != b.len() {
         return 0.0;
