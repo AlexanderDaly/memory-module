@@ -133,3 +133,23 @@ fn test_sharded_store_basic() {
     let retrieved = store.get_memory(&id).expect("missing");
     assert_eq!(retrieved.id, id);
 }
+
+#[cfg(feature = "faiss")]
+#[test]
+fn test_faiss_integration_basic() {
+    let profile = AgentProfile::default();
+    let state = AgentState::default();
+    let mut store = MemoryStore::new(profile, state);
+
+    // insert two vectors
+    let mem1 = Memory::new(vec![0.1, 0.2], 0.0, 0.0, 1.0);
+    let id1 = mem1.id;
+    store.add_memory(mem1);
+    let mem2 = Memory::new(vec![0.9, 0.8], 0.0, 0.0, 1.0);
+    let id2 = mem2.id;
+    store.add_memory(mem2);
+
+    let results = store.find_relevant(&[0.1, 0.2], 1).unwrap();
+    assert_eq!(results.len(), 1);
+    assert!(results[0].1.id == id1 || results[0].1.id == id2);
+}

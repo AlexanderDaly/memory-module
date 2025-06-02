@@ -8,12 +8,16 @@ use crate::model::{AgentProfile, AgentState, Memory};
 use chrono::Utc;
 use std::collections::HashMap;
 use uuid::Uuid;
+#[cfg(feature = "faiss")]
+use crate::faiss_index::FaissIndex;
 
 /// In-memory storage for memories with basic CRUD operations
 pub struct MemoryStore {
     memories: HashMap<Uuid, Memory>,
     agent_profile: AgentProfile,
     agent_state: AgentState,
+    #[cfg(feature = "faiss")]
+    faiss_index: Option<FaissIndex>,
 }
 
 impl MemoryStore {
@@ -40,12 +44,23 @@ impl MemoryStore {
             memories: HashMap::new(),
             agent_profile,
             agent_state,
+            #[cfg(feature = "faiss")]
+            faiss_index: None,
         }
     }
 
     /// Adds a new memory to the store
     pub fn add_memory(&mut self, memory: Memory) -> Uuid {
         let id = memory.id;
+        #[cfg(feature = "faiss")]
+        {
+            if let Some(index) = &mut self.faiss_index {
+                let _ = index.add_vector(id, &memory.semantic_vector);
+            } else if let Ok(mut idx) = FaissIndex::new(memory.semantic_vector.len()) {
+                let _ = idx.add_vector(id, &memory.semantic_vector);
+                self.faiss_index = Some(idx);
+            }
+        }
         self.memories.insert(id, memory);
         id
     }
@@ -87,13 +102,36 @@ impl MemoryStore {
         limit: usize,
     ) -> Result<Vec<(f32, Memory)>> {
         let now = Utc::now();
-        
-        // First pass: score all memories
+
+        #[cfg(feature = "faiss")]
+        let mut scored: Vec<_> = if let Some(index) = &self.faiss_index {
+            index
+                .search(query_vector, limit)?
+                .into_iter()
+                .filter_map(|(dist, id)| {
+                    self.memories.get(&id).map(|mem| {
+                        let retention = mem.calculate_retention(now, &self.agent_state, &self.agent_profile);
+                        (id, (1.0 / (1.0 + dist)) * retention)
+                    })
+                })
+                .collect()
+        } else {
+            self
+                .memories
+                .iter()
+                .map(|(id, mem)| {
+                    let similarity = cosine_similarity(query_vector, &mem.semantic_vector);
+                    let retention = mem.calculate_retention(now, &self.agent_state, &self.agent_profile);
+                    (*id, similarity * retention)
+                })
+                .collect()
+        };
+
+        #[cfg(not(feature = "faiss"))]
         let mut scored: Vec<_> = self
             .memories
             .iter()
             .map(|(id, mem)| {
-                // Calculate relevance score (cosine similarity * retention)
                 let similarity = cosine_similarity(query_vector, &mem.semantic_vector);
                 let retention = mem.calculate_retention(now, &self.agent_state, &self.agent_profile);
                 (*id, similarity * retention)
