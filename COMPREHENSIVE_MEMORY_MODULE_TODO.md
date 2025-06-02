@@ -14,7 +14,7 @@
     - [ ] Set up CI/CD for auto-publishing documentation
 
 ### 1.2 Architecture Documentation
-- [ ] Add `ARCHITECTURE.md` explaining core concepts, components, and interactions
+- [x] Add `ARCHITECTURE.md` explaining core concepts, components, and interactions
 - [ ] Document the memory retention algorithm in detail, including trade-offs
 - [ ] Add data flow diagrams for key processes (insertion, retrieval, eviction)
 - [ ] Add sequence diagrams for common API interactions
