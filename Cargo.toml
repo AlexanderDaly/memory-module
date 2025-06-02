@@ -9,6 +9,7 @@ license = "MIT"
 [features]
 default = ["serde"]
 serde = ["dep:serde", "dep:serde_json"]
+concurrent = ["dep:dashmap"]
 
 [dependencies]
 # Core dependencies
@@ -18,6 +19,9 @@ serde = { version = "1.0.196", features = ["derive"], optional = true }
 serde_json = { version = "1.0.113", optional = true }
 thiserror = "1.0.50"
 log = "0.4.20"
+
+# Concurrent map (optional)
+dashmap = { version = "5.5.3", optional = true }
 
 # Math and vector operations
 rand = "0.8.5"

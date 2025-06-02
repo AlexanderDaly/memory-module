@@ -57,11 +57,15 @@
 pub mod error;
 pub mod model;
 pub mod store;
+#[cfg(feature = "concurrent")]
+pub mod concurrent_store;
 
 // Re-exports
 pub use chrono;
 pub use model::{AgentProfile, AgentState, Memory};
 pub use store::MemoryStore;
+#[cfg(feature = "concurrent")]
+pub use concurrent_store::ConcurrentMemoryStore;
 pub use uuid;
 
 /// Prelude for convenient importing
@@ -78,6 +82,8 @@ pub mod prelude {
         error::{MemoryError, Result},
         model::{AgentProfile, AgentState, Memory},
         store::MemoryStore,
+        #[cfg(feature = "concurrent")]
+        concurrent_store::ConcurrentMemoryStore,
     };
 }
 

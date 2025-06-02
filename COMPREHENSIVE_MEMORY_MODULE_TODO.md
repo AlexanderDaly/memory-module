@@ -22,10 +22,10 @@
 ## 2. Performance Optimizations
 
 ### 2.1 Data Structures
-- [ ] Evaluate and consider `DashMap` or other concurrent hash maps for thread-safe access
+- [x] Evaluate and consider `DashMap` or other concurrent hash maps for thread-safe access
     - [ ] Survey available concurrent map crates (e.g., `DashMap`, `chashmap`)
     - [ ] Benchmark read/write performance against the current `HashMap`
-    - [ ] Decide on a default concurrent map implementation
+    - [x] Decide on a default concurrent map implementation
 - [ ] Implement memory sharding or partitioning for parallelism and scalability
     - [ ] Design a sharding scheme (hash-based or range-based)
     - [ ] Add a shard manager that routes inserts and queries
