@@ -59,6 +59,8 @@ pub mod model;
 pub mod store;
 #[cfg(feature = "concurrent")]
 pub mod concurrent_store;
+#[cfg(feature = "concurrent")]
+pub mod sharded_store;
 
 // Re-exports
 pub use chrono;
@@ -66,6 +68,8 @@ pub use model::{AgentProfile, AgentState, Memory};
 pub use store::MemoryStore;
 #[cfg(feature = "concurrent")]
 pub use concurrent_store::ConcurrentMemoryStore;
+#[cfg(feature = "concurrent")]
+pub use sharded_store::ShardedMemoryStore;
 pub use uuid;
 
 /// Prelude for convenient importing
@@ -84,6 +88,8 @@ pub mod prelude {
         store::MemoryStore,
         #[cfg(feature = "concurrent")]
         concurrent_store::ConcurrentMemoryStore,
+        #[cfg(feature = "concurrent")]
+        sharded_store::ShardedMemoryStore,
     };
 }
 

@@ -113,3 +113,23 @@ fn test_concurrent_store_basic() {
     let retrieved = store.get_memory(&id).expect("memory missing");
     assert_eq!(retrieved.id, id);
 }
+
+#[cfg(feature = "concurrent")]
+#[test]
+fn test_sharded_store_basic() {
+    let profile = AgentProfile::default();
+    let state = AgentState {
+        current_age: 25.0,
+        sleep_debt: 0.0,
+        cortisol_level: 0.0,
+        fatigue: 0.0,
+        training_factor: 0.0,
+    };
+
+    let store = ShardedMemoryStore::new(profile, state, 4);
+    let memory = Memory::new(vec![1.0, 0.0], 0.0, 25.0, 1.0);
+    let id = memory.id;
+    store.add_memory(memory);
+    let retrieved = store.get_memory(&id).expect("missing");
+    assert_eq!(retrieved.id, id);
+}
