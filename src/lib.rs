@@ -61,6 +61,8 @@ pub mod store;
 pub mod concurrent_store;
 #[cfg(feature = "concurrent")]
 pub mod sharded_store;
+#[cfg(any(feature = "faiss"))]
+pub mod faiss_index;
 
 // Re-exports
 pub use chrono;
