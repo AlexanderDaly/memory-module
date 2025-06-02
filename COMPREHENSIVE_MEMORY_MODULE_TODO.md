@@ -15,9 +15,9 @@
 
 ### 1.2 Architecture Documentation
 - [x] Add `ARCHITECTURE.md` explaining core concepts, components, and interactions
-- [ ] Document the memory retention algorithm in detail, including trade-offs
-- [ ] Add data flow diagrams for key processes (insertion, retrieval, eviction)
-- [ ] Add sequence diagrams for common API interactions
+- [x] Document the memory retention algorithm in detail, including trade-offs
+- [x] Add data flow diagrams for key processes (insertion, retrieval, eviction)
+- [x] Add sequence diagrams for common API interactions
 
 ## 2. Performance Optimizations
 
