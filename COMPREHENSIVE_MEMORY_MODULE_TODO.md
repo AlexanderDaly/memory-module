@@ -39,7 +39,7 @@
 
 ### 2.2 Similarity Search
 - [ ] Integrate FAISS, HNSWlib, or other optimized ANN libraries
-- [ ] Add SIMD optimizations for vector operations (e.g., `packed_simd` or intrinsics)
+- [x] Add SIMD optimizations for vector operations (e.g., `packed_simd` or intrinsics)
 - [ ] Implement batch processing for bulk similarity search operations
 - [ ] Evaluate and compare different indexing strategies (e.g., IVFADC, SCANN)
 

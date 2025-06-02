@@ -10,6 +10,7 @@ license = "MIT"
 default = ["serde"]
 serde = ["dep:serde", "dep:serde_json"]
 concurrent = ["dep:dashmap"]
+simd = []
 
 [dependencies]
 # Core dependencies
