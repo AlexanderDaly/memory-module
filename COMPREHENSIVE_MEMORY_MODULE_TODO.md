@@ -23,9 +23,19 @@
 
 ### 2.1 Data Structures
 - [ ] Evaluate and consider `DashMap` or other concurrent hash maps for thread-safe access
+    - [ ] Survey available concurrent map crates (e.g., `DashMap`, `chashmap`)
+    - [ ] Benchmark read/write performance against the current `HashMap`
+    - [ ] Decide on a default concurrent map implementation
 - [ ] Implement memory sharding or partitioning for parallelism and scalability
+    - [ ] Design a sharding scheme (hash-based or range-based)
+    - [ ] Add a shard manager that routes inserts and queries
+    - [ ] Provide APIs for cross-shard iteration and maintenance
 - [ ] Add benchmarking to measure performance of different data structures
+    - [ ] Set up `criterion` benchmarks for store operations
+    - [ ] Compare baseline performance with alternative data structures
 - [ ] Profile memory usage and CPU hotspots to identify data structure bottlenecks
+    - [ ] Run profiling tools (`perf`, `cargo profiler`) on representative workloads
+    - [ ] Document findings and propose optimizations
 
 ### 2.2 Similarity Search
 - [ ] Integrate FAISS, HNSWlib, or other optimized ANN libraries
