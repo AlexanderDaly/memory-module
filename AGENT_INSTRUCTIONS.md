@@ -1,8 +1,11 @@
-# Agent Instructions for Documentation Tasks
+# Agent Instructions for Project Tasks
 
 ## General Guidelines
 
-- All agents working on tasks outlined in `TODO_API_DOCUMENTATION.md` are required to adhere to the following protocol.
+- All agents working on tasks outlined in any project-related to-do list Markdown file (e.g., `COMPREHENSIVE_MEMORY_MODULE_TODO.md`, `TODO_ARCHITECTURE_DOCUMENTATION.md`, etc.) are required to adhere to the protocols outlined in this document.
+- Before starting work on a new major task category (e.g., "Performance Optimizations", "Persistence Layer"), check if a specific `TODO_<TASK_NAME>.md` file exists for it. If so, refer to that specialized to-do list.
+- If a specialized to-do list does not exist for a major task, refer to the main `COMPREHENSIVE_MEMORY_MODULE_TODO.md`.
+- Always ensure you are working from the latest version of any to-do list file.
 
 ## Task Completion Protocol
 

@@ -3,15 +3,15 @@
 ## 1. Documentation Improvements
 
 ### 1.1 API Documentation
-- [ ] Add `///` doc comments to all public items
-- [ ] Include usage examples in documentation
-    - [ ] Ensure examples are runnable doctests
-- [ ] Document error conditions and panics for all public APIs
-- [ ] Add `#![warn(missing_docs)]` to the crate root
-    - [ ] Address all resulting warnings
-- [ ] Generate documentation using `cargo doc`
-    - [ ] Ensure it's published (e.g., to docs.rs or a project website)
-    - [ ] Set up CI/CD for auto-publishing documentation
+- [x] Add `///` doc comments to all public items
+- [x] Include usage examples in documentation
+    - [x] Ensure examples are runnable doctests
+- [x] Document error conditions and panics for all public APIs
+- [x] Add `#![warn(missing_docs)]` to the crate root
+    - [x] Address all resulting warnings
+- [x] Generate documentation using `cargo doc`
+    - [x] Ensure it's published (e.g., to docs.rs or a project website)
+    - [x] Set up CI/CD for auto-publishing documentation
 
 ### 1.2 Architecture Documentation
 - [x] Add `ARCHITECTURE.md` explaining core concepts, components, and interactions
