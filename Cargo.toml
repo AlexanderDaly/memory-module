@@ -7,7 +7,7 @@ authors = ["Your Name"]
 license = "MIT"
 
 [features]
-default = ["serde"]
+default = ["serde", "chrono"]
 serde = ["dep:serde", "dep:serde_json"]
 concurrent = ["dep:dashmap"]
 simd = []
