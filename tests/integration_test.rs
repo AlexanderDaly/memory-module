@@ -127,10 +127,10 @@ fn test_save_load_roundtrip() {
     let id = mem.id;
     store.add_memory(mem);
 
-    let path = "./test_store.json";
-    store.save(path).unwrap();
-    let loaded: MemoryStore = Load::load(path).unwrap();
-    std::fs::remove_file(path).unwrap();
+    let temp_file = tempfile::NamedTempFile::new().unwrap();
+    store.save(temp_file.path()).unwrap();
+    let loaded: MemoryStore = Load::load(temp_file.path()).unwrap();
+    // Temporary file is automatically deleted when it goes out of scope.
     assert!(loaded.get_memory(&id).is_some());
 }
 
