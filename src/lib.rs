@@ -61,6 +61,7 @@ pub mod store;
 pub mod concurrent_store;
 #[cfg(feature = "concurrent")]
 pub mod sharded_store;
+mod simd;
 
 // Re-exports
 pub use chrono;

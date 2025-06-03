@@ -32,7 +32,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-memory-module = { path = "./memory-module", features = ["serde"] }
+memory-module = { path = "./memory-module", features = ["serde", "simd"] }
 ```
 
 ### Example
@@ -66,6 +66,12 @@ store.add_memory(memory);
 let query = vec![0.15, 0.25, 0.35];
 let relevant = store.find_relevant(&query, 5).unwrap();
 ```
+
+## Cargo Features
+
+- `serde` - enable serialization and deserialization
+- `concurrent` - provide thread-safe memory stores
+- `simd` - accelerate vector operations with SIMD instructions
 
 ## Running Examples
 
