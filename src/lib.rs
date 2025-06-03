@@ -57,6 +57,7 @@
 pub mod error;
 pub mod model;
 pub mod store;
+pub mod storage;
 pub mod simd_utils;
 #[cfg(feature = "concurrent")]
 pub mod concurrent_store;
@@ -70,6 +71,9 @@ pub mod persistence;
 pub use chrono;
 pub use model::{AgentProfile, AgentState, Memory};
 pub use store::MemoryStore;
+#[cfg(feature = "serde")]
+pub use storage::{FileBackend, StoredData};
+pub use storage::StorageBackend;
 #[cfg(feature = "concurrent")]
 pub use concurrent_store::ConcurrentMemoryStore;
 #[cfg(feature = "concurrent")]
@@ -92,6 +96,11 @@ pub mod prelude {
         model::{AgentProfile, AgentState, Memory},
         store::MemoryStore,
         persistence::{Load, Save},
+        StorageBackend,
+        #[cfg(feature = "serde")]
+        FileBackend,
+        #[cfg(feature = "serde")]
+        StoredData,
         #[cfg(feature = "concurrent")]
         concurrent_store::ConcurrentMemoryStore,
         #[cfg(feature = "concurrent")]
