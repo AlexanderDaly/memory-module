@@ -57,6 +57,7 @@
 pub mod error;
 pub mod model;
 pub mod store;
+pub mod simd_utils;
 #[cfg(feature = "concurrent")]
 pub mod concurrent_store;
 #[cfg(feature = "concurrent")]
