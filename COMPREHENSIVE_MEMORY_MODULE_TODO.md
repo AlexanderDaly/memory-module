@@ -48,7 +48,7 @@
 ### 3.1 Serialization
 - [x] Add `serde` support for all core types
 - [ ] Implement `Save`/`Load` traits for the main memory store and components
-- [ ] Add support for multiple storage backends (local file, object storage, databases)
+- [x] Add support for multiple storage backends (local file, object storage, databases)
 - [ ] Implement data format versioning for backward/forward compatibility
 
 ### 3.2 Database Integration

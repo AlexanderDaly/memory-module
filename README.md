@@ -9,6 +9,7 @@ A Rust library implementing a biologically inspired memory model for AI agents, 
 - **Efficient**: Designed for real-time use in games and interactive applications
 - **Extensible**: Easy to integrate with different storage backends and AI systems
 - **Database Backends**: Enable SQLite, PostgreSQL, or MySQL support via feature flags
+- **Persistent**: Includes a file-based backend and trait for custom storage implementations
 
 ## Core Concepts
 
