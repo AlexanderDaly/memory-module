@@ -117,6 +117,23 @@ fn test_find_relevant_batch() {
     assert_eq!(results[1].len(), 1);
 }
 
+#[cfg(feature = "serde")]
+#[test]
+fn test_save_load_roundtrip() {
+    let profile = AgentProfile::default();
+    let state = AgentState::default();
+    let mut store = MemoryStore::new(profile, state);
+    let mem = Memory::new(vec![0.3, 0.4], 0.1, 0.0, 1.0);
+    let id = mem.id;
+    store.add_memory(mem);
+
+    let path = "./test_store.json";
+    store.save(path).unwrap();
+    let loaded: MemoryStore = Load::load(path).unwrap();
+    std::fs::remove_file(path).unwrap();
+    assert!(loaded.get_memory(&id).is_some());
+}
+
 #[cfg(feature = "concurrent")]
 #[test]
 fn test_concurrent_store_basic() {
