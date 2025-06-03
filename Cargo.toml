@@ -11,9 +11,9 @@ default = ["serde"]
 serde = ["dep:serde", "dep:serde_json"]
 concurrent = ["dep:dashmap"]
 faiss = ["dep:faiss"]
-sqlite = ["dep:sqlx", "sqlx/sqlite", "sqlx/runtime-tokio-rustls"]
-postgres = ["dep:sqlx", "sqlx/postgres", "sqlx/runtime-tokio-rustls"]
-mysql = ["dep:sqlx", "sqlx/mysql", "sqlx/runtime-tokio-rustls"]
+sqlite = ["dep:sqlx", "sqlx/sqlite", "sqlx/runtime-tokio-rustls", "dep:tokio"]
+postgres = ["dep:sqlx", "sqlx/postgres", "sqlx/runtime-tokio-rustls", "dep:tokio"]
+mysql = ["dep:sqlx", "sqlx/mysql", "sqlx/runtime-tokio-rustls", "dep:tokio"]
 
 [dependencies]
 # Core dependencies
@@ -36,6 +36,7 @@ faiss = { version = "0.12.1", optional = true }
 
 # Database support (optional)
 sqlx = { version = "0.7", optional = true, default-features = false, features = ["macros"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros"], optional = true }
 
 [dev-dependencies]
 rstest = "0.18.2"
