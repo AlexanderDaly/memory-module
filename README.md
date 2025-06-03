@@ -77,6 +77,8 @@ cargo run --example basic_usage --features="serde"
 ## Documentation
 
 Detailed documentation is available via `cargo doc --open`.
+For a discussion of approximate indexing options, see
+[docs/indexing_comparison.md](docs/indexing_comparison.md).
 
 ## License
 

@@ -41,7 +41,7 @@
 - [x] Integrate FAISS, HNSWlib, or other optimized ANN libraries
  - [x] Add SIMD optimizations for vector operations (e.g., `packed_simd` or intrinsics)
 - [x] Implement batch processing for bulk similarity search operations
-- [ ] Evaluate and compare different indexing strategies (e.g., IVFADC, SCANN)
+ - [x] Evaluate and compare different indexing strategies (e.g., IVFADC, SCANN)
 
 ## 3. Persistence Layer
 
