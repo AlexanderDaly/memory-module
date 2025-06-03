@@ -66,6 +66,8 @@ pub mod sharded_store;
 #[cfg(any(feature = "faiss"))]
 pub mod faiss_index;
 pub mod persistence;
+#[cfg(any(feature = "sqlite", feature = "postgres", feature = "mysql"))]
+pub mod migration;
 
 // Re-exports
 pub use chrono;
@@ -80,6 +82,8 @@ pub use concurrent_store::ConcurrentMemoryStore;
 pub use sharded_store::ShardedMemoryStore;
 pub use persistence::{Load, Save};
 pub use uuid;
+#[cfg(any(feature = "sqlite", feature = "postgres", feature = "mysql"))]
+pub use migration::run_migrations;
 
 /// Prelude for convenient importing
 ///
@@ -105,6 +109,8 @@ pub mod prelude {
         concurrent_store::ConcurrentMemoryStore,
         #[cfg(feature = "concurrent")]
         sharded_store::ShardedMemoryStore,
+        #[cfg(any(feature = "sqlite", feature = "postgres", feature = "mysql"))]
+        run_migrations,
     };
 }
 
@@ -112,6 +118,8 @@ pub mod prelude {
 mod tests {
     use super::*;
     use approx::assert_relative_eq;
+    #[cfg(any(feature = "sqlite", feature = "postgres", feature = "mysql"))]
+    use sqlx::AnyPool;
 
     #[test]
     fn test_prelude_reexports() {
@@ -125,5 +133,10 @@ mod tests {
         // Ensure Save/Load traits are in scope
         fn assert_save_load<T: Save + Load>() {}
         let _ = assert_save_load::<MemoryStore>;
+        #[cfg(any(feature = "sqlite", feature = "postgres", feature = "mysql"))]
+        {
+            let _fn: fn(&sqlx::AnyPool) -> Result<()> = run_migrations;
+            let _ = _fn;
+        }
     }
 }
