@@ -65,6 +65,7 @@ pub mod concurrent_store;
 pub mod sharded_store;
 #[cfg(any(feature = "faiss"))]
 pub mod faiss_index;
+pub mod persistence;
 
 // Re-exports
 pub use chrono;
@@ -77,6 +78,7 @@ pub use storage::StorageBackend;
 pub use concurrent_store::ConcurrentMemoryStore;
 #[cfg(feature = "concurrent")]
 pub use sharded_store::ShardedMemoryStore;
+pub use persistence::{Load, Save};
 pub use uuid;
 
 /// Prelude for convenient importing
@@ -93,6 +95,7 @@ pub mod prelude {
         error::{MemoryError, Result},
         model::{AgentProfile, AgentState, Memory},
         store::MemoryStore,
+        persistence::{Load, Save},
         StorageBackend,
         #[cfg(feature = "serde")]
         FileBackend,
@@ -119,5 +122,8 @@ mod tests {
         let _ = AgentState::default();
         let _ = Memory::new(vec![], 0.0, 0.0, 0.0);
         let _ = MemoryStore::default();
+        // Ensure Save/Load traits are in scope
+        fn assert_save_load<T: Save + Load>() {}
+        let _ = assert_save_load::<MemoryStore>;
     }
 }
