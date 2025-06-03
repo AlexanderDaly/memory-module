@@ -14,8 +14,21 @@ use uuid::Uuid;
 #[cfg(feature = "faiss")]
 use crate::faiss_index::FaissIndex;
 
+#[cfg(feature = "serde")]
+/// Current data format version for serialized stores.
+pub const DATA_FORMAT_VERSION: u8 = 1;
+
+#[cfg(feature = "serde")]
+#[derive(Serialize, Deserialize)]
+struct MemoryStoreData {
+    #[serde(default)]
+    version: u8,
+    memories: HashMap<Uuid, Memory>,
+    agent_profile: AgentProfile,
+    agent_state: AgentState,
+}
+
 /// In-memory storage for memories with basic CRUD operations
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct MemoryStore {
     memories: HashMap<Uuid, Memory>,
     agent_profile: AgentProfile,
@@ -219,6 +232,39 @@ impl MemoryStore {
     }
 }
 
+#[cfg(feature = "serde")]
+impl Serialize for MemoryStore {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let data = MemoryStoreData {
+            version: DATA_FORMAT_VERSION,
+            memories: self.memories.clone(),
+            agent_profile: self.agent_profile.clone(),
+            agent_state: self.agent_state.clone(),
+        };
+        data.serialize(serializer)
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de> Deserialize<'de> for MemoryStore {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let data = MemoryStoreData::deserialize(deserializer)?;
+        Ok(Self {
+            memories: data.memories,
+            agent_profile: data.agent_profile,
+            agent_state: data.agent_state,
+            #[cfg(feature = "faiss")]
+            faiss_index: None,
+        })
+    }
+}
+
 /// Calculates cosine similarity between two vectors.
 ///
 /// Returns `0.0` if the vectors are empty or their lengths differ.
@@ -230,6 +276,8 @@ fn cosine_similarity(a: &[f32], b: &[f32]) -> f32 {
 mod tests {
     use super::*;
     use chrono::Duration;
+    #[cfg(feature = "serde")]
+    use serde_json;
 
     fn create_test_memory(emotion: f32, days_old: i64) -> Memory {
         let mut memory = Memory::new(
@@ -323,5 +371,14 @@ mod tests {
         let deserialized: MemoryStore = serde_json::from_str(&json).expect("deserialize");
 
         assert!(deserialized.get_memory(&id).is_some());
+    }
+
+    #[cfg(feature = "serde")]
+    #[test]
+    fn test_serialization_includes_version() {
+        let store = MemoryStore::new(AgentProfile::default(), AgentState::default());
+        let json = serde_json::to_string(&store).expect("serialize");
+        let v: serde_json::Value = serde_json::from_str(&json).unwrap();
+        assert_eq!(v["version"], DATA_FORMAT_VERSION);
     }
 }
