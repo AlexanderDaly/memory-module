@@ -35,3 +35,4 @@ faiss = { version = "0.12.1", optional = true }
 rstest = "0.18.2"
 approx = "0.5.1"
 env_logger = "0.11.3"
+criterion = { version = "0.5", features = ["html_reports"] }
