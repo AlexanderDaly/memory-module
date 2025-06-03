@@ -5,6 +5,8 @@
 
 use crate::error::{MemoryError, Result};
 use crate::model::{AgentProfile, AgentState, Memory};
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
 use chrono::Utc;
 use crate::simd_utils;
 use std::collections::HashMap;
@@ -13,6 +15,7 @@ use uuid::Uuid;
 use crate::faiss_index::FaissIndex;
 
 /// In-memory storage for memories with basic CRUD operations
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct MemoryStore {
     memories: HashMap<Uuid, Memory>,
     agent_profile: AgentProfile,
@@ -306,5 +309,19 @@ mod tests {
         
         assert!(pruned > 0);
         assert!(store.get_memory(&old_id).is_none());
+    }
+
+    #[cfg(feature = "serde")]
+    #[test]
+    fn test_serialization_roundtrip() {
+        let mut store = MemoryStore::new(AgentProfile::default(), AgentState::default());
+        let memory = Memory::new(vec![0.1, 0.2], 0.0, 0.0, 1.0);
+        let id = memory.id;
+        store.add_memory(memory);
+
+        let json = serde_json::to_string(&store).expect("serialize");
+        let deserialized: MemoryStore = serde_json::from_str(&json).expect("deserialize");
+
+        assert!(deserialized.get_memory(&id).is_some());
     }
 }

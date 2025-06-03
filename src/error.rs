@@ -4,6 +4,8 @@
 //! errors that can occur during memory operations.
 
 use std::fmt;
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
 
 /// The error type for memory module operations.
 ///
@@ -19,6 +21,7 @@ use std::fmt;
 /// let not_found = MemoryError::not_found("123e4567-e89b-12d3-a456-426614174000");
 /// let invalid_param = MemoryError::invalid_param("retention_threshold", -1.0);
 /// ```
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug, Clone, PartialEq)]
 #[non_exhaustive]
 pub enum MemoryError {
