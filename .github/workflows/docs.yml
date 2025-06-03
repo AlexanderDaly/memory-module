@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v3
       - uses: actions-rs/toolchain@v1
@@ -25,6 +27,8 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
     if: github.ref_type == 'tag'
     steps:
       - uses: actions/configure-pages@v2
