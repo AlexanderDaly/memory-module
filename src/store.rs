@@ -255,6 +255,12 @@ impl<'de> Deserialize<'de> for MemoryStore {
         D: serde::Deserializer<'de>,
     {
         let data = MemoryStoreData::deserialize(deserializer)?;
+        if data.version != DATA_FORMAT_VERSION {
+            return Err(serde::de::Error::custom(format!(
+                "Incompatible data format version: expected {}, found {}",
+                DATA_FORMAT_VERSION, data.version
+            )));
+        }
         Ok(Self {
             memories: data.memories,
             agent_profile: data.agent_profile,
