@@ -72,6 +72,98 @@ impl StorageBackend for FileBackend {
     }
 }
 
+/// SQLite-based storage backend using `sqlx`.
+#[cfg(all(feature = "serde", feature = "sqlite"))]
+pub struct SqliteBackend {
+    url: String,
+}
+
+#[cfg(all(feature = "serde", feature = "sqlite"))]
+impl SqliteBackend {
+    /// Create a new [`SqliteBackend`] with the given connection URL.
+    pub fn new<U: Into<String>>(url: U) -> Self {
+        Self { url: url.into() }
+    }
+
+    fn block_on<F: std::future::Future>(&self, fut: F) -> F::Output {
+        tokio::runtime::Runtime::new()
+            .expect("create runtime")
+            .block_on(fut)
+    }
+}
+
+#[cfg(all(feature = "serde", feature = "sqlite"))]
+impl StorageBackend for SqliteBackend {
+    fn load(&self) -> Result<StoredData> {
+        use sqlx::sqlite::SqlitePoolOptions;
+
+        let url = self.url.clone();
+        self.block_on(async move {
+            let pool = SqlitePoolOptions::new()
+                .connect(&url)
+                .await
+                .map_err(|e| MemoryError::Storage(e.to_string()))?;
+
+            sqlx::query(
+                "CREATE TABLE IF NOT EXISTS memory_store (id INTEGER PRIMARY KEY, data TEXT NOT NULL)",
+            )
+            .execute(&pool)
+            .await
+            .map_err(|e| MemoryError::Storage(e.to_string()))?;
+
+            if let Some(row) = sqlx::query_as::<_, (String,)>(
+                "SELECT data FROM memory_store WHERE id = 1",
+            )
+            .fetch_optional(&pool)
+            .await
+            .map_err(|e| MemoryError::Storage(e.to_string()))?
+            {
+                let data: StoredData = serde_json::from_str(&row.0)
+                    .map_err(|e| MemoryError::Serialization(e.to_string()))?;
+                Ok(data)
+            } else {
+                Ok(StoredData {
+                    memories: HashMap::new(),
+                    agent_profile: AgentProfile::default(),
+                    agent_state: AgentState::default(),
+                })
+            }
+        })
+    }
+
+    fn save(&self, data: &StoredData) -> Result<()> {
+        use sqlx::sqlite::SqlitePoolOptions;
+
+        let json = serde_json::to_string(data)
+            .map_err(|e| MemoryError::Serialization(e.to_string()))?;
+        let url = self.url.clone();
+        self.block_on(async move {
+            let pool = SqlitePoolOptions::new()
+                .connect(&url)
+                .await
+                .map_err(|e| MemoryError::Storage(e.to_string()))?;
+
+            sqlx::query(
+                "CREATE TABLE IF NOT EXISTS memory_store (id INTEGER PRIMARY KEY, data TEXT NOT NULL)",
+            )
+            .execute(&pool)
+            .await
+            .map_err(|e| MemoryError::Storage(e.to_string()))?;
+
+            sqlx::query(
+                "INSERT INTO memory_store (id, data) VALUES (1, ?1) \
+                 ON CONFLICT(id) DO UPDATE SET data=excluded.data",
+            )
+            .bind(json)
+            .execute(&pool)
+            .await
+            .map_err(|e| MemoryError::Storage(e.to_string()))?;
+
+            Ok(())
+        })
+    }
+}
+
 #[cfg(feature = "serde")]
 impl MemoryStore {
     /// Persist the store to the given backend.
