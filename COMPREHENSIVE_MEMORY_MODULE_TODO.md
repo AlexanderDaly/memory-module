@@ -30,9 +30,9 @@
     - [x] Design a sharding scheme (hash-based or range-based)
     - [x] Add a shard manager that routes inserts and queries
     - [x] Provide APIs for cross-shard iteration and maintenance
-- [ ] Add benchmarking to measure performance of different data structures
-    - [ ] Set up `criterion` benchmarks for store operations
-    - [ ] Compare baseline performance with alternative data structures
+- [x] Add benchmarking to measure performance of different data structures
+    - [x] Set up `criterion` benchmarks for store operations
+    - [x] Compare baseline performance with alternative data structures
 - [ ] Profile memory usage and CPU hotspots to identify data structure bottlenecks
     - [ ] Run profiling tools (`perf`, `cargo profiler`) on representative workloads
     - [ ] Document findings and propose optimizations
@@ -78,7 +78,7 @@
 ### 5.1 Test Coverage
 - [ ] Add property-based tests (`proptest`, `quickcheck`) for core algorithms/data structures
 - [ ] Improve integration test coverage for component interactions
-- [ ] Add benchmark tests (`criterion.rs`) to track performance and prevent regressions
+- [x] Add benchmark tests (`criterion.rs`) to track performance and prevent regressions
 - [ ] Aim for high code coverage (>80-90%) using `cargo-tarpaulin` or `grcov`
 - [ ] Include tests for edge cases, error conditions, and invalid inputs
 
