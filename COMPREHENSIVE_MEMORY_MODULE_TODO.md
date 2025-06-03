@@ -52,7 +52,7 @@
 - [ ] Implement data format versioning for backward/forward compatibility
 
 ### 3.2 Database Integration
-- [ ] Add feature flags for different database backends (SQLite, PostgreSQL/MySQL)
+- [x] Add feature flags for different database backends (SQLite, PostgreSQL/MySQL)
 - [ ] Implement a `StorageBackend` trait for database interaction abstraction
 - [ ] Add a migration system (e.g., `sqlx-macros`, `diesel_migrations`)
 - [ ] Implement connection pooling for database connections
