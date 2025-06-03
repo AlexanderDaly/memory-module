@@ -8,6 +8,7 @@ A Rust library implementing a biologically inspired memory model for AI agents, 
 - **Configurable**: Tune parameters to model different memory profiles
 - **Efficient**: Designed for real-time use in games and interactive applications
 - **Extensible**: Easy to integrate with different storage backends and AI systems
+- **Persistent**: Includes a file-based backend and trait for custom storage implementations
 
 ## Core Concepts
 

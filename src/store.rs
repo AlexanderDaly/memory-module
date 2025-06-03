@@ -37,6 +37,12 @@ pub struct MemoryStore {
     faiss_index: Option<FaissIndex>,
 }
 
+impl Default for MemoryStore {
+    fn default() -> Self {
+        Self::new(AgentProfile::default(), AgentState::default())
+    }
+}
+
 impl MemoryStore {
     /// Creates a new [`MemoryStore`] with the given [`AgentProfile`] and [`AgentState`].
     ///
