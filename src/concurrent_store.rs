@@ -2,12 +2,15 @@
 
 use crate::error::{MemoryError, Result};
 use crate::model::{AgentProfile, AgentState, Memory};
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
 use chrono::Utc;
 use crate::simd_utils;
 use dashmap::DashMap;
 use uuid::Uuid;
 
 /// Thread-safe memory store using `DashMap` for concurrent access.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct ConcurrentMemoryStore {
     memories: DashMap<Uuid, Memory>,
     agent_profile: AgentProfile,

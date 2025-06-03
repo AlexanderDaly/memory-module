@@ -2,12 +2,15 @@
 
 use crate::error::{MemoryError, Result};
 use crate::model::{AgentProfile, AgentState, Memory};
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
 use chrono::Utc;
 use crate::simd_utils;
 use dashmap::DashMap;
 use uuid::Uuid;
 
 /// Memory store that partitions data across multiple shards for scalability.
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct ShardedMemoryStore {
     shards: Vec<DashMap<Uuid, Memory>>,
     agent_profile: AgentProfile,

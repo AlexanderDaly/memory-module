@@ -46,7 +46,7 @@
 ## 3. Persistence Layer
 
 ### 3.1 Serialization
-- [ ] Add `serde` support for all core types
+- [x] Add `serde` support for all core types
 - [ ] Implement `Save`/`Load` traits for the main memory store and components
 - [ ] Add support for multiple storage backends (local file, object storage, databases)
 - [ ] Implement data format versioning for backward/forward compatibility
