@@ -304,9 +304,9 @@ impl Memory {
         };
         
         // Capacity competition
-        let c_max = agent_profile.c_base * 
+        let c_max = profile.c_base *
             (1.0 - agent_state.fatigue + agent_state.training_factor);
-        let cap_comp = (self.capacity_weight.min(c_max) / agent_profile.c_base).max(0.0);
+        let cap_comp = (self.capacity_weight.min(c_max) / profile.c_base).max(0.0);
         
         // Interference (simplified - would use ANN in production)
         // For now, we'll use a placeholder value

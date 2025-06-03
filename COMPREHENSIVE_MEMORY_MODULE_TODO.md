@@ -76,7 +76,7 @@
 ## 5. Testing Strategy
 
 ### 5.1 Test Coverage
-- [ ] Add property-based tests (`proptest`, `quickcheck`) for core algorithms/data structures
+- [x] Add property-based tests (`proptest`, `quickcheck`) for core algorithms/data structures
 - [ ] Improve integration test coverage for component interactions
 - [x] Add benchmark tests (`criterion.rs`) to track performance and prevent regressions
 - [ ] Aim for high code coverage (>80-90%) using `cargo-tarpaulin` or `grcov`
