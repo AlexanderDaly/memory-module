@@ -48,6 +48,7 @@
   - Add SIMD optimizations for vector operations (e.g., using `packed_simd` or architecture-specific intrinsics)
   - Implement batch processing for bulk similarity search operations
   - Evaluate and compare different indexing strategies (e.g., IVFADC, SCANN) for trade-offs in speed, accuracy, and memory usage
+    (see [docs/indexing_comparison.md](docs/indexing_comparison.md))
   - Add GPU path toggle (faiss-gpu / cuBLAS) for large deployments
   - Explore vector quantisation or product quantisation for memory-constrained edge devices
 
