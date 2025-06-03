@@ -8,6 +8,7 @@ A Rust library implementing a biologically inspired memory model for AI agents, 
 - **Configurable**: Tune parameters to model different memory profiles
 - **Efficient**: Designed for real-time use in games and interactive applications
 - **Extensible**: Easy to integrate with different storage backends and AI systems
+- **Database Backends**: Enable SQLite, PostgreSQL, or MySQL support via feature flags
 - **Persistent**: Includes a file-based backend and trait for custom storage implementations
 
 ## Core Concepts
@@ -34,6 +35,17 @@ Add this to your `Cargo.toml`:
 ```toml
 [dependencies]
 memory-module = { path = "./memory-module", features = ["serde"] }
+```
+
+Enable a database backend by adding the appropriate feature:
+
+```toml
+# SQLite
+memory-module = { path = "./memory-module", features = ["serde", "sqlite"] }
+# PostgreSQL
+memory-module = { path = "./memory-module", features = ["serde", "postgres"] }
+# MySQL
+memory-module = { path = "./memory-module", features = ["serde", "mysql"] }
 ```
 
 ### Example
