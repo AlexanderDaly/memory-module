@@ -52,12 +52,12 @@ fn bench_dashmap_insert(c: &mut Criterion) {
 #[cfg(feature = "concurrent")]
 fn bench_dashmap_lookup(c: &mut Criterion) {
     c.bench_function("dashmap_lookup", |b| {
+        let map: DashMap<Uuid, u32> = DashMap::new();
+        let keys: Vec<_> = (0..1000).map(|_| Uuid::new_v4()).collect();
+        for k in &keys {
+            map.insert(*k, 1);
+        }
         b.iter(|| {
-            let map: DashMap<Uuid, u32> = DashMap::new();
-            let keys: Vec<_> = (0..1000).map(|_| Uuid::new_v4()).collect();
-            for k in &keys {
-                map.insert(*k, 1);
-            }
             for k in &keys {
                 let _ = map.get(k);
             }
