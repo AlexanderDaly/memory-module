@@ -15,16 +15,22 @@ fn bench_hashmap_insert(c: &mut Criterion) {
 
 fn bench_hashmap_lookup(c: &mut Criterion) {
     c.bench_function("hashmap_lookup", |b| {
-        b.iter(|| {
-            let mut map: HashMap<Uuid, u32> = HashMap::new();
-            let keys: Vec<_> = (0..1000).map(|_| Uuid::new_v4()).collect();
-            for k in &keys {
-                map.insert(*k, 1);
-            }
-            for k in &keys {
-                let _ = map.get(k);
-            }
-        });
+        b.iter_batched(
+            || {
+                let mut map: HashMap<Uuid, u32> = HashMap::new();
+                let keys: Vec<_> = (0..1000).map(|_| Uuid::new_v4()).collect();
+                for k in &keys {
+                    map.insert(*k, 1);
+                }
+                (map, keys)
+            },
+            |(map, keys)| {
+                for k in &keys {
+                    let _ = map.get(k);
+                }
+            },
+            criterion::BatchSize::SmallInput,
+        );
     });
 }
 
