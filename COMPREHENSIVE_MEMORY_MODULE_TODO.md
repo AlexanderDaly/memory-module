@@ -24,7 +24,7 @@
 ### 2.1 Data Structures
 - [x] Evaluate and consider `DashMap` or other concurrent hash maps for thread-safe access
     - [x] Survey available concurrent map crates (e.g., `DashMap`, `chashmap`)
-    - [ ] Benchmark read/write performance against the current `HashMap`
+    - [x] Benchmark read/write performance against the current `HashMap`
     - [x] Decide on a default concurrent map implementation
 - [x] Implement memory sharding or partitioning for parallelism and scalability
     - [x] Design a sharding scheme (hash-based or range-based)
