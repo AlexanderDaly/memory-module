@@ -97,25 +97,23 @@ pub use migration::run_migrations;
 /// use memory_module::prelude::*;
 /// ```
 pub mod prelude {
-    pub use crate::{
-        error::{MemoryError, Result},
-        model::{AgentProfile, AgentState, Memory},
-        store::MemoryStore,
-        persistence::{Load, Save},
-        StorageBackend,
-        #[cfg(feature = "serde")]
-        FileBackend,
-        #[cfg(all(feature = "serde", feature = "sqlite"))]
-        SqliteBackend,
-        #[cfg(feature = "serde")]
-        StoredData,
-        #[cfg(feature = "concurrent")]
-        concurrent_store::ConcurrentMemoryStore,
-        #[cfg(feature = "concurrent")]
-        sharded_store::ShardedMemoryStore,
-        #[cfg(any(feature = "sqlite", feature = "postgres", feature = "mysql"))]
-        run_migrations,
-    };
+    pub use crate::error::{MemoryError, Result};
+    pub use crate::model::{AgentProfile, AgentState, Memory};
+    pub use crate::store::MemoryStore;
+    pub use crate::persistence::{Load, Save};
+    pub use crate::StorageBackend;
+    #[cfg(feature = "serde")]
+    pub use crate::FileBackend;
+    #[cfg(all(feature = "serde", feature = "sqlite"))]
+    pub use crate::SqliteBackend;
+    #[cfg(feature = "serde")]
+    pub use crate::StoredData;
+    #[cfg(feature = "concurrent")]
+    pub use crate::concurrent_store::ConcurrentMemoryStore;
+    #[cfg(feature = "concurrent")]
+    pub use crate::sharded_store::ShardedMemoryStore;
+    #[cfg(any(feature = "sqlite", feature = "postgres", feature = "mysql"))]
+    pub use crate::run_migrations;
 }
 
 #[cfg(test)]
